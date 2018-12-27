@@ -96,7 +96,8 @@ def generatePrivkeyPubkeyPair(keypath: str, seed: bytes, compressed: bool):
         pubkey = pubkey_address.privkey2pubkey(privkey)
         return privkey, pubkey
 
-def test():
+#def test():
+if __name__ == '__main__':
         parser = optparse.OptionParser(usage="python3 hd_wallet.py -s <Salt>")
         parser.add_option('-s', '--salt', action='store', dest='salt', help='Add salt to secret')
         (args, _) = parser.parse_args()
@@ -132,5 +133,5 @@ def test():
         address_s = pubkey_address.pubkey2address(chaincode)
         print('keys at m / 5\'/6: private key = %s, public key = %s, addess = %s' % (privkey_wif, bytes.decode(binascii.hexlify(chaincode)), address_s))
 
-if __name__ == '__main__':
-        mnemonic_code = input
+#if __name__ == '__main__':
+#        mnemonic_code = input
