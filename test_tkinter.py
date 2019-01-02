@@ -1,13 +1,18 @@
 import tkinter
 import tkinter.messagebox
-import numpy as np
 
 top = tkinter.Tk()
 
-def helloCallBack():
-   tkinter.messagebox.showinfo( "Hello Python", "Hello World")
+def callback(sq: int):
+   tkinter.messagebox.showinfo( "Hello", "%d" % sq)
 
-B = tkinter.Button(top, text ="Hello", command = helloCallBack)
+top.title("RUN ON START TEST")
 
-B.pack()
+frame = tkinter.Frame(top)
+frame.pack()
+
+for y in range(0,11):
+        b = tkinter.Button(frame, text='%d' % y,   command=lambda y=y: callback(y))
+        b.grid(row=0,column=y)
+
 top.mainloop()
