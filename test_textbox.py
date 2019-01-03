@@ -28,7 +28,7 @@ top.title("RUN ON START TEST")
 frame = tkinter.Frame(top)
 frame.pack()
 
-for y in range(0,2):
+for y in range(0,12):
         entries.append('')
         message1.append(tkinter.StringVar())
         message1[y].set('%d:unset' % y)

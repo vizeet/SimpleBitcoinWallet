@@ -1,7 +1,6 @@
 import tkinter
 from tkinter.ttk import Combobox
 import tkinter.messagebox
-import numpy as np
 
 top = tkinter.Tk()
 message = []

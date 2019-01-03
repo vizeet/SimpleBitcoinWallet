@@ -3,6 +3,17 @@ from utils import random_number_generator
 import binascii
 from functools import reduce
 import math
+import tkinter
+from tkinter.ttk import Combobox
+import tkinter.messagebox
+
+top = tkinter.Tk()
+message = []
+word_key_list = []
+
+def callback(i: int):
+        tkinter.messagebox.showinfo( "%d" % (i+1), "%s" % word_key_list[i])
+        message[i].set('Pressed')
 
 def getChecksumBitCount(mnemonic_length: int):
         if (mnemonic_length % 3) != 0:
@@ -81,7 +92,7 @@ def getMnemonicWordCodeString(mnemonic_length: int):
         mnemonic_word_list = getMnemonicWordList()
         word_key_list = [mnemonic_word_list[selector] for selector in selector_list]
 
-        return ' '.join(word_key_list)
+        return word_key_list
 
 def verifyChecksumInSelectorBits(entropy_check_i: int, mnemonic_length: int):
         entropy_bit_count = getEntropyBitCount(mnemonic_length)
@@ -113,7 +124,23 @@ def verifyMnemonicWordCodeString(mnemonic_code: str):
 if __name__ == '__main__':
         #word_key_list = getMnemonicWordCodeString(15)
         word_key_list = getMnemonicWordCodeString(12)
+        top.title("MNEMONIC CODES")
+        top.grid_rowconfigure(1,weight=1)
+        top.grid_columnconfigure(1,weight=1)
 
-        print('mnemonic key list = %s' % word_key_list)
+        frame = tkinter.Frame(top)
+        frame.pack(fill=tkinter.X, padx=5, pady=5)
 
-        print('is valid = %r' % verifyMnemonicWordCodeString(word_key_list))
+        for y in range(0,12):
+                message.append(tkinter.StringVar())
+                message[y].set('Not pressed.')
+                b = tkinter.Button(frame, textvariable=message[y],   command=lambda y=y: callback(y))
+                b.grid(row=0,column=y)
+
+        top.mainloop()
+
+        joined_word_key_list = ' '.join(word_key_list)
+
+        #print('mnemonic key list = %s' % joined_word_key_list)
+
+        print('is valid = %r' % verifyMnemonicWordCodeString(joined_word_key_list))
