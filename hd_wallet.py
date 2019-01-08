@@ -43,6 +43,14 @@ def callback(y: int):
     entry.pack()
     button.pack()
 
+key_selector = ''
+def on_button_selector(entry, root):
+    global key_selector
+    key_selector = str(entry.get())
+    #print('key_selector = %s' % key_selector)
+    root.destroy()
+
+
 # implementation of BIP32
 # mainnet: 0x0488B21E public, 0x0488ADE4 private; testnet: 0x043587CF public, 0x04358394 private
 
@@ -125,8 +133,8 @@ def generatePrivkeyPubkeyPair(keypath: str, seed: bytes, compressed: bool):
                         else:
                                 index = int(key)
                         privkey, chaincode = generateChildAtIndex(privkey, chaincode, index)
-                print('key = %s' % key)
-                print('private key = %x, chaincode = %s' % (privkey, bytes.decode(binascii.hexlify(chaincode))))
+                #print('key = %s' % key)
+                #print('private key = %x, chaincode = %s' % (privkey, bytes.decode(binascii.hexlify(chaincode))))
         pubkey = pubkey_address.privkey2pubkey(privkey)
         return privkey, pubkey
 
@@ -189,12 +197,29 @@ if __name__ == '__main__':
         #print('seed = %s' % bytes.decode(binascii.hexlify(seed_b)))
 
         #privkey_i, chaincode = generatePrivkeyPubkeyPair('m / 5\'/ 6', seed_b, True)
-        key_selector = 'm/10/2'
+        #key_selector = 'm/10/2'
+        root = tkinter.Tk()
+        selector = tkinter.StringVar()
+        entry = tkinter.Entry(root, textvariable=selector, width=20)
+        button = tkinter.Button(root, text="Get", command=lambda entry=entry, root=root: on_button_selector(entry, root))
+        entry.pack()
+        button.pack()
+        root.mainloop()
+
+        #print('inside main: key_selector = %s' % key_selector)
         privkey_i, chaincode = generatePrivkeyPubkeyPair(key_selector, seed_b, True)
         privkey_wif = pubkey_address.privkeyHex2Wif(privkey_i)
         address_s = pubkey_address.pubkey2address(chaincode)
         #print('keys at m/5\'/6: private key = %s, public key = %s, addess = %s' % (privkey_wif, bytes.decode(binascii.hexlify(chaincode)), address_s))
-        print('keys at %s: private key = %s, public key = %s, addess = %s' % (key_selector, privkey_wif, bytes.decode(binascii.hexlify(chaincode)), address_s))
+        #print('keys at %s: private key = %s, public key = %s, addess = %s' % (key_selector, privkey_wif, bytes.decode(binascii.hexlify(chaincode)), address_s))
+
+
+        root = tkinter.Tk()
+        root.attributes("-fullscreen", True)
+        T = tkinter.Text(root, height=10, width=100, font=("Helvetica", 32))
+        T.pack()
+        T.insert(tkinter.END, address_s)
+        root.mainloop()
 
 #if __name__ == '__main__':
 #        mnemonic_code = input
