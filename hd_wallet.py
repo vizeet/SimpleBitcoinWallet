@@ -10,6 +10,7 @@ from utils import base58
 import pubkey_address 
 import tkinter
 from functools import partial 
+import pyqrcode
 
 message1 = []
 entries = []
@@ -214,12 +215,24 @@ if __name__ == '__main__':
         #print('keys at %s: private key = %s, public key = %s, addess = %s' % (key_selector, privkey_wif, bytes.decode(binascii.hexlify(chaincode)), address_s))
 
 
-        root = tkinter.Tk()
-        root.attributes("-fullscreen", True)
-        T = tkinter.Text(root, height=10, width=100, font=("Helvetica", 32))
-        T.pack()
-        T.insert(tkinter.END, address_s)
-        root.mainloop()
+#        root = tkinter.Tk()
+#        root.attributes("-fullscreen", True)
+#        T = tkinter.Text(root, height=10, width=100, font=("Helvetica", 32))
+#        T.pack()
+#        T.insert(tkinter.END, address_s)
+#        root.mainloop()
+
+        code = pyqrcode.create(address_s)
+        code_xbm = code.xbm(scale=5)
+        top = tkinter.Tk()
+        top.attributes("-fullscreen", True)
+        code_bmp = tkinter.BitmapImage(data=code_xbm)
+        code_bmp.config(foreground="black")
+        code_bmp.config(background="white")
+        label = tkinter.Label(image=code_bmp)
+        label.pack()
+        top.mainloop()
+
 
 #if __name__ == '__main__':
 #        mnemonic_code = input
