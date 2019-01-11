@@ -212,7 +212,7 @@ if __name__ == '__main__':
         privkey_wif = pubkey_address.privkeyHex2Wif(privkey_i)
         address_s = pubkey_address.pubkey2address(chaincode)
         #print('keys at m/5\'/6: private key = %s, public key = %s, addess = %s' % (privkey_wif, bytes.decode(binascii.hexlify(chaincode)), address_s))
-        #print('keys at %s: private key = %s, public key = %s, addess = %s' % (key_selector, privkey_wif, bytes.decode(binascii.hexlify(chaincode)), address_s))
+        print('keys at %s: private key = %s, public key = %s, addess = %s' % (key_selector, privkey_wif, bytes.decode(binascii.hexlify(chaincode)), address_s))
 
 
 #        root = tkinter.Tk()
@@ -232,6 +232,13 @@ if __name__ == '__main__':
         label = tkinter.Label(image=code_bmp)
         label.pack()
         top.mainloop()
+
+        if input('address = ') == address_s:
+            print('address is valid')
+        if input('public key = ') == bytes.decode(binascii.hexlify(chaincode)):
+            print('public key is valid')
+        if input('private key = ') == privkey_wif:
+            print('private key is valid')
 
 
 #if __name__ == '__main__':

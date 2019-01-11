@@ -141,6 +141,6 @@ if __name__ == '__main__':
 
         joined_word_key_list = ' '.join(word_key_list)
 
-        #print('mnemonic key list = %s' % joined_word_key_list)
+        print('mnemonic key list = %s' % joined_word_key_list)
 
         print('is valid = %r' % verifyMnemonicWordCodeString(joined_word_key_list))
