@@ -119,11 +119,6 @@ def generateChildAtIndex(privkey: int, chaincode: bytes, index: int):
 
                 full_pubkey_b = b'\x04' + vk.to_string()
                 pubkey = pubkey_address.compressPubkey(full_pubkey_b)
-
-                print('using std package: pub_key = %s' % bytes.decode(binascii.hexlify(pubkey)))
-
-#                pubkey = pubkey_address.privkey2pubkey(privkey)
-#                print('**************** pubkey = %s' % bytes.decode(binascii.hexlify(pubkey)))
                 h = hmac.new(chaincode, pubkey + binascii.unhexlify('%08x' % index), hashlib.sha512).digest()
         childprivkey = (int(binascii.hexlify(h[0:32]), 16) + privkey) % bitcoin_secp256k1.N
         #print('h[0:32] = %x' % int(binascii.hexlify(h[0:32]), 16))
@@ -147,10 +142,16 @@ def generatePrivkeyPubkeyPair(keypath: str, seed: bytes, compressed: bool):
                         privkey, chaincode = generateChildAtIndex(privkey, chaincode, index)
                 #print('key = %s' % key)
                 #print('private key = %x, chaincode = %s' % (privkey, bytes.decode(binascii.hexlify(chaincode))))
-        pubkey = pubkey_address.privkey2pubkey(privkey)
+        privkey_s = '%064x' % privkey
+        privkey_b = binascii.unhexlify(privkey_s)
+        sk = SigningKey.from_string(privkey_b, curve=SECP256k1)
+        vk = sk.get_verifying_key()
+
+        full_pubkey_b = b'\x04' + vk.to_string()
+        pubkey = pubkey_address.compressPubkey(full_pubkey_b)
+#        print('privkey = %x, pubkey = %s' % (privkey, bytes.decode(binascii.hexlify(pubkey))))
         return privkey, pubkey
 
-#def test():
 if __name__ == '__main__':
         parser = optparse.OptionParser(usage="python3 hd_wallet.py -s <Salt>")
         parser.add_option('-s', '--salt', action='store', dest='salt', help='Add salt to secret')
@@ -223,7 +224,7 @@ if __name__ == '__main__':
         privkey_wif = pubkey_address.privkeyHex2Wif(privkey_i)
         address_s = pubkey_address.pubkey2address(chaincode)
         #print('keys at m/5\'/6: private key = %s, public key = %s, addess = %s' % (privkey_wif, bytes.decode(binascii.hexlify(chaincode)), address_s))
-        print('keys at %s: private key = %s, public key = %s, addess = %s' % (key_selector, privkey_wif, bytes.decode(binascii.hexlify(chaincode)), address_s))
+        print('keys at %s: privkey_i = %x, private key = %s, public key = %s, addess = %s' % (key_selector, privkey_i, privkey_wif, bytes.decode(binascii.hexlify(chaincode)), address_s))
 
 
 #        root = tkinter.Tk()

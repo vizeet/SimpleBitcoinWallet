@@ -19,7 +19,8 @@ def compressPubkey(pubkey: bytes):
 def privkey2pubkey(privkey: int):
         bitcoin_sec256k1 = bitcoin_secp256k1.BitcoinSec256k1()
         pubkey = bitcoin_sec256k1.privkey2pubkey(privkey)
-        full_pubkey = b'\x04' + binascii.unhexlify(str('%064x' % pubkey[0])) + binascii.unhexlify(str('%064x' % pubkey[1]))
+#        full_pubkey = b'\x04' + binascii.unhexlify(str('%064x' % pubkey[0])) + binascii.unhexlify(str('%064x' % pubkey[1]))
+        full_pubkey = binascii.unhexlify('04%064x%064x' % (pubkey[0],pubkey[1]))
         compressed_pubkey = compressPubkey(full_pubkey)
         return compressed_pubkey
 
