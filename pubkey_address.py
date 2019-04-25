@@ -43,8 +43,18 @@ def pkh2address(pkh: bytes):
         address = bitcoin_base58.forAddress(pkh, "mainnet", False)
         return address
 
+def pkh2addressLTC(pkh: bytes):
+        address = litecoin_base58.forAddress(pkh, "mainnet", False)
+        return address
+
 def pubkey2address(pubkey: bytes):
         pkh = hash_utils.hash160(pubkey)
         print('pkh = %s' % bytes.decode(binascii.hexlify(pkh)))
         address = pkh2address(pkh)
+        return address
+
+def pubkey2addressLTC(pubkey: bytes):
+        pkh = hash_utils.hash160(pubkey)
+        print('pkh = %s' % bytes.decode(binascii.hexlify(pkh)))
+        address = pkh2addressLTC(pkh)
         return address

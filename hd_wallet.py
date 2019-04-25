@@ -11,6 +11,7 @@ import pubkey_address
 import tkinter
 from functools import partial 
 import pyqrcode
+from ecdsa import SigningKey, SECP256k1
 
 message1 = []
 entries = []
@@ -111,8 +112,18 @@ def generateChildAtIndex(privkey: int, chaincode: bytes, index: int):
                 #print('h = %s' % bytes.decode(binascii.hexlify(h)))
         else:
                 # normal
-                pubkey = pubkey_address.privkey2pubkey(privkey)
-                #print('pubkey = %s' % bytes.decode(binascii.hexlify(pubkey)))
+                privkey_s = '%064x' % privkey
+                privkey_b = binascii.unhexlify(privkey_s)
+                sk = SigningKey.from_string(privkey_b, curve=SECP256k1)
+                vk = sk.get_verifying_key()
+
+                full_pubkey_b = b'\x04' + vk.to_string()
+                pubkey = pubkey_address.compressPubkey(full_pubkey_b)
+
+                print('using std package: pub_key = %s' % bytes.decode(binascii.hexlify(pubkey)))
+
+#                pubkey = pubkey_address.privkey2pubkey(privkey)
+#                print('**************** pubkey = %s' % bytes.decode(binascii.hexlify(pubkey)))
                 h = hmac.new(chaincode, pubkey + binascii.unhexlify('%08x' % index), hashlib.sha512).digest()
         childprivkey = (int(binascii.hexlify(h[0:32]), 16) + privkey) % bitcoin_secp256k1.N
         #print('h[0:32] = %x' % int(binascii.hexlify(h[0:32]), 16))
